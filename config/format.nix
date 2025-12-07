@@ -74,6 +74,8 @@ in {
     };
   };
 
+  plugins.guess-indent.enable = true;
+
   keymaps = [
     {
       mode = ["n" "v"];
