@@ -62,4 +62,17 @@
   };
 
   plugins.which-key.enable = true;
+
+  plugins.nvim-tree = {
+    enable = true;
+  };
+
+  keymaps = [
+    {
+      mode = ["n" "v"];
+      key = "<leader>e";
+      action = "NvimTreeToggle";
+      options.desc = "[ ] Open file [e]xplorer";
+    }
+  ];
 }
