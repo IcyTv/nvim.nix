@@ -1,18 +1,6 @@
 {...}: {
   plugins.lsp = {
     enable = true;
-    servers = {
-      bashls.enable = true;
-      clangd.enable = true;
-      cmake.enable = true;
-      cssls.enable = true;
-      html.enable = true;
-      jsonls.enable = true;
-      lua_ls.enable = true;
-      nixd.enable = true;
-      ts_ls.enable = true;
-      yamlls.enable = true;
-    };
     keymaps = {
       diagnostic = {
         "<leader>j" = "goto_next";
