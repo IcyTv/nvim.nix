@@ -1,0 +1,76 @@
+warning: Git tree '/home/michael/projects/nvim.nix' is dirty
+warning: Git tree '/home/michael/projects/nvim.nix' is dirty
+evaluating ''...
+evaluating ''...
+evaluating 'checks'...
+evaluating 'checks'...
+evaluating 'checks.x86_64-linux'...
+evaluating 'checks.x86_64-linux'...
+evaluating 'checks.x86_64-linux.default'...
+evaluating 'checks.x86_64-linux.default'...
+error:
+       … while evaluating the attribute 'optionalValue.value'
+         at /nix/store/55z53i8nflvx4y9662rc0b6xb9y43b66-source/lib/modules.nix:1253:5:
+         1252|
+         1253|     optionalValue = if isDefined then { value = mergedValue; } else { };
+             |     ^
+         1254|   };
+
+       … while evaluating a branch condition
+         at /nix/store/55z53i8nflvx4y9662rc0b6xb9y43b66-source/lib/modules.nix:1253:21:
+         1252|
+         1253|     optionalValue = if isDefined then { value = mergedValue; } else { };
+             |                     ^
+         1254|   };
+
+       … while evaluating definitions from `/nix/store/r3i0h1671yjfr8xzldmvbyffyrmx2y0m-source/modules/transposition.nix':
+
+       … while evaluating definitions from `/nix/store/x9bp0qpcgnk0052zcg4z1fvrjzgy9d1y-source/flake.nix, via option perSystem':
+
+       … while evaluating definitions from `/nix/store/mdqg912lgybzhhpcxsvza0vp0xqg249r-source/modules/top-level/files':
+
+       … while evaluating the module argument `pkgs' in "/nix/store/mdqg912lgybzhhpcxsvza0vp0xqg249r-source/modules/top-level/files":
+
+       … noting that argument `pkgs` is not externally provided, so querying `_module.args` instead, requiring `config`
+
+       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+       error: The option `_module.args.pkgs' is defined multiple times while it's expected to be unique.
+
+       Definition values:
+       - In `/nix/store/mdqg912lgybzhhpcxsvza0vp0xqg249r-source/modules/top-level/nixpkgs.nix'
+       - In `<unknown-file>'
+       Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
+error:
+       … while evaluating the attribute 'optionalValue.value'
+         at /nix/store/55z53i8nflvx4y9662rc0b6xb9y43b66-source/lib/modules.nix:1253:5:
+         1252|
+         1253|     optionalValue = if isDefined then { value = mergedValue; } else { };
+             |     ^
+         1254|   };
+
+       … while evaluating a branch condition
+         at /nix/store/55z53i8nflvx4y9662rc0b6xb9y43b66-source/lib/modules.nix:1253:21:
+         1252|
+         1253|     optionalValue = if isDefined then { value = mergedValue; } else { };
+             |                     ^
+         1254|   };
+
+       … while evaluating definitions from `/nix/store/r3i0h1671yjfr8xzldmvbyffyrmx2y0m-source/modules/transposition.nix':
+
+       … while evaluating definitions from `/nix/store/x9bp0qpcgnk0052zcg4z1fvrjzgy9d1y-source/flake.nix, via option perSystem':
+
+       … while evaluating definitions from `/nix/store/mdqg912lgybzhhpcxsvza0vp0xqg249r-source/modules/top-level/files':
+
+       … while evaluating the module argument `pkgs' in "/nix/store/mdqg912lgybzhhpcxsvza0vp0xqg249r-source/modules/top-level/files":
+
+       … noting that argument `pkgs` is not externally provided, so querying `_module.args` instead, requiring `config`
+
+       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+       error: The option `_module.args.pkgs' is defined multiple times while it's expected to be unique.
+
+       Definition values:
+       - In `/nix/store/mdqg912lgybzhhpcxsvza0vp0xqg249r-source/modules/top-level/nixpkgs.nix'
+       - In `<unknown-file>'
+       Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.

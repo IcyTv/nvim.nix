@@ -1,9 +1,10 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: let
-  cfg = lib.options.languages.rust;
+  cfg = config.languages.rust;
 in {
   options.languages.rust = {
     enable = lib.mkEnableOption "Enable Rust support";
@@ -26,7 +27,7 @@ in {
     #     package = cfg.format.package;
     #   };
     # };
-    plugins.conform-nvim = lib.mkIf cfg.format.enable {
+    plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
       formatters_by_ft = {
         rust = ["rustfmt"];
       };
