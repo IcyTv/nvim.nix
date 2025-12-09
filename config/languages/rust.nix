@@ -15,6 +15,11 @@ in {
         type = with lib.types; package;
         default = pkgs.rustfmt;
       };
+      args = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [];
+        description = "Additional arguments to pass to the rustfmt command.";
+      };
     };
   };
 
@@ -31,7 +36,10 @@ in {
         rust = ["rustfmt"];
       };
       formatters = {
-        "rustfmt".command = lib.getExe cfg.format.package;
+        "rustfmt" = {
+          command = lib.getExe cfg.format.package;
+          args = cfg.format.args;
+        };
       };
     };
     extraPackages = lib.mkIf cfg.lsp.enable [pkgs.rust-analyzer];
