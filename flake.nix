@@ -65,6 +65,7 @@
           shell = import ./config/languages/shell.nix;
           typescript = import ./config/languages/typescript.nix;
           tailwind = import ./config/languages/tailwind.nix;
+          svelte = import ./config/languages/svelte.nix;
         };
 
         # System-dependent library, created for each system
@@ -82,6 +83,7 @@
                 nixvimModules.shell
                 nixvimModules.typescript
                 nixvimModules.tailwind
+                nixvimModules.svelte
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
               ];
@@ -103,6 +105,7 @@
               nixvimModules.shell
               nixvimModules.typescript
               nixvimModules.tailwind
+              nixvimModules.svelte
             ];
           };
         };
