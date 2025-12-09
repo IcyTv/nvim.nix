@@ -24,8 +24,8 @@ in {
         description = "The rust-analyzer package to use";
       };
       command = lib.mkOption {
-        type = with lib.types; listOf str;
-        default = ["${cfg.lsp.package}/bin/rust-analyzer"];
+        type = with lib.types; nullOr (listOf str);
+        default = null;
       };
     };
     format = {
