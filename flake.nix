@@ -63,6 +63,8 @@
           rust = import ./config/languages/rust.nix;
           nix = import ./config/languages/nix.nix;
           shell = import ./config/languages/shell.nix;
+          typescript = import ./config/languages/typescript.nix;
+          tailwind = import ./config/languages/tailwind.nix;
         };
 
         # System-dependent library, created for each system
@@ -78,6 +80,8 @@
                 nixvimModules.rust
                 nixvimModules.nix
                 nixvimModules.shell
+                nixvimModules.typescript
+                nixvimModules.tailwind
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
               ];
@@ -97,6 +101,8 @@
               nixvimModules.rust
               nixvimModules.nix
               nixvimModules.shell
+              nixvimModules.typescript
+              nixvimModules.tailwind
             ];
           };
         };
