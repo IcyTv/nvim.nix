@@ -33,7 +33,7 @@ in {
       };
       args = lib.mkOption {
         type = with lib.types; listOf str;
-        default = ["--plugin=prettier-plugin-svelte"];
+        default = ["--plugin=prettier-plugin-svelte" "--parser" "svelte"];
         description = "Additional arguments to pass to the prettier command for svelte.";
       };
     };

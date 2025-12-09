@@ -33,7 +33,7 @@ in {
       };
       args = lib.mkOption {
         type = with lib.types; listOf str;
-        default = ["--plugin=prettier-plugin-tailwindcss"];
+        default = ["--plugin=prettier-plugin-tailwindcss" "--parser" "css"];
         description = "Additional arguments to pass to the prettier command for tailwind.";
       };
     };

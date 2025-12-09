@@ -42,15 +42,19 @@ in {
   config = lib.mkIf cfg.enable {
     plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
       formatters_by_ft = {
-        javascript = ["prettier"];
-        typescript = ["prettier"];
-        javascriptreact = ["prettier"];
-        typescriptreact = ["prettier"];
+        javascript = ["prettier-js"];
+        typescript = ["prettier-ts"];
+        javascriptreact = ["prettier-js"];
+        typescriptreact = ["prettier-ts"];
       };
       formatters = {
-        "prettier" = {
+        "prettier-js" = {
           command = lib.getExe cfg.format.package;
-          args = cfg.format.args;
+          args = cfg.format.args ++ ["--parser" "babel"];
+        };
+        "prettier-ts" = {
+          command = lib.getExe cfg.format.package;
+          args = cfg.format.args ++ ["--parser" "typescript"];
         };
       };
     };
