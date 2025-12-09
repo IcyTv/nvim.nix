@@ -56,7 +56,6 @@
       jump2d = {};
       pick = {};
       sessions = {};
-      animate = {};
       icons = {};
     };
   };
