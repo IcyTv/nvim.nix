@@ -73,24 +73,26 @@
         };
       };
 
-      # Modules for use in NixOS or with `makeNixvimWithModule`
-      nixvimModules = {
-        default = import ./config;
-        rust = import ./config/languages/rust.nix;
-      };
+      flake = {
+        # Modules for use in NixOS or with `makeNixvimWithModule`
+        nixvimModules = {
+          default = import ./config;
+          rust = import ./config/languages/rust.nix;
+        };
 
-      # NixOS module to activate the nixvim configuration
-      nixosModules.default = { config, lib, ... }: {
-        # Import the main nixvim module for NixOS
-        imports = [ nixvim.nixosModules.default ];
+        # NixOS module to activate the nixvim configuration
+        nixosModules.default = { config, lib, ... }: {
+          # Import the main nixvim module for NixOS
+          imports = [ nixvim.nixosModules.default ];
 
-        # When programs.nixvim is enabled in the NixOS configuration,
-        # import your custom nixvim modules.
-        config = lib.mkIf config.programs.nixvim.enable {
-          programs.nixvim.imports = [
-            self.nixvimModules.default
-            self.nixvimModules.rust
-          ];
+          # When programs.nixvim is enabled in the NixOS configuration,
+          # import your custom nixvim modules.
+          config = lib.mkIf config.programs.nixvim.enable {
+            programs.nixvim.imports = [
+              self.nixvimModules.default
+              self.nixvimModules.rust
+            ];
+          };
         };
       };
     };
