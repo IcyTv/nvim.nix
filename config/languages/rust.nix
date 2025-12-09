@@ -50,10 +50,12 @@ in {
     #     package = cfg.format.package;
     #   };
     # };
-    assertions = {
-      assertion = !(cfg.lsp.package != null && cfg.lsp.command != null);
-      message = "The options `language.rust.lsp.package` and `language.rust.lsp.command` are mutually exclusive. Using command will override the package anyways.";
-    };
+    assertions = [
+      {
+        assertion = !(cfg.lsp.package != null && cfg.lsp.command != null);
+        message = "The options `language.rust.lsp.package` and `language.rust.lsp.command` are mutually exclusive. Using command will override the package anyways.";
+      }
+    ];
     plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
       formatters_by_ft = {
         rust = ["rustfmt"];
