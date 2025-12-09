@@ -10,11 +10,6 @@
       jsonls.enable = true;
       lua_ls.enable = true;
       nixd.enable = true;
-      rust_analyzer = {
-        enable = true;
-        installCargo = true;
-        installRustc = true;
-      };
       ts_ls.enable = true;
       yamlls.enable = true;
     };

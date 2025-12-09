@@ -6,6 +6,7 @@
     nixvim = {
       url = "github:/nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
@@ -78,6 +79,19 @@
         rust = import ./config/languages/rust.nix;
       };
 
-      nixosModules = self.nixvimModules;
+      # NixOS module to activate the nixvim configuration
+      nixosModules.default = { config, lib, ... }: {
+        # Import the main nixvim module for NixOS
+        imports = [ nixvim.nixosModules.default ];
+
+        # When programs.nixvim is enabled in the NixOS configuration,
+        # import your custom nixvim modules.
+        config = lib.mkIf config.programs.nixvim.enable {
+          programs.nixvim.imports = [
+            self.nixvimModules.default
+            self.nixvimModules.rust
+          ];
+        };
+      };
     };
 }

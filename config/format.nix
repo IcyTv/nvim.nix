@@ -30,7 +30,6 @@ in {
         markdown = prettier;
         nix = ["alejandra"];
         python = ["isort" "black"];
-        rust = ["rustfmt"];
         sh = ["shellcheck" "shellharden" "shfmt"];
         typescript = prettier;
         typescriptreact = prettier;
