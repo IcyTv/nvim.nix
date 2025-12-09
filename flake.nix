@@ -17,40 +17,26 @@
     nixvim,
     flake-parts,
     ...
-  } @ inputs: let
-    # Define a function that, given a system, creates the `makeNeovimWithLanguages` function.
-    # This lets us share it between `perSystem` and `flake.lib`.
-    mkMakeNeovimWithLanguages = system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+  } @ inputs:
+    let
+      # Define the list of systems once to share it
+      supportedSystems = ["x86_64-linux"];
     in
-      {languages ? {}}:
-        nixvim.legacyPackages.${system}.makeNixvimWithModule {
-          inherit pkgs;
-          module = [
-            self.nixvimModules.default
-            self.nixvimModules.rust
-            # more languages here
-            # This module sets the configuration based on the function's input.
-            {config.languages = languages;}
-          ];
-        };
-  in
     flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
+      systems = supportedSystems;
 
       perSystem = {
-        system,
         pkgs,
+        system,
         ...
       }: let
-        # Create the function for the current system
-        makeNeovimWithLanguages = mkMakeNeovimWithLanguages system;
-        # Build the default package using the function
-        nvim = makeNeovimWithLanguages {};
-      in {
-        packages = {
-          default = nvim;
+        # Call the library function from the final flake outputs
+        nvim = inputs.self.lib.${system}.makeNeovimWithLanguages {
+          inherit pkgs;
+          languages = {};
         };
+      in {
+        packages.default = nvim;
 
         devShells.default = pkgs.mkShellNoCC {
           shellHook =
@@ -70,17 +56,30 @@
         };
       };
 
-      flake = {
-        # Expose the `lib` at the top level, generating it for all systems.
-        lib = flake-parts.lib.forAllSystems (system: {
-          makeNeovimWithLanguages = mkMakeNeovimWithLanguages system;
-        });
-
-        # Modules for use in NixOS or with `makeNixvimWithModule`
+      # Top-level, non-system-specific outputs
+      flake = rec {
+        # Nixvim modules used by the library function
         nixvimModules = {
           default = import ./config;
           rust = import ./config/languages/rust.nix;
         };
+
+        # System-dependent library, created for each system
+        lib = nixpkgs.lib.genAttrs supportedSystems (system: {
+          makeNeovimWithLanguages = {
+            pkgs,
+            languages ? {},
+          }:
+            nixvim.legacyPackages.${system}.makeNixvimWithModule {
+              inherit pkgs;
+              module = [
+                nixvimModules.default
+                nixvimModules.rust
+                # This module sets the configuration based on the function's input.
+                {config.languages = languages;}
+              ];
+            };
+        });
 
         # NixOS module to activate the nixvim configuration
         nixosModules.default = {
@@ -88,15 +87,11 @@
           lib,
           ...
         }: {
-          # Import the main nixvim module for NixOS
           imports = [nixvim.nixosModules.default];
-
-          # When programs.nixvim is enabled in the NixOS configuration,
-          # import your custom nixvim modules.
           config = lib.mkIf config.programs.nixvim.enable {
             programs.nixvim.imports = [
-              self.nixvimModules.default
-              self.nixvimModules.rust
+              nixvimModules.default
+              nixvimModules.rust
             ];
           };
         };
