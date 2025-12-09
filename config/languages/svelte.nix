@@ -51,7 +51,7 @@ in {
         };
       };
     };
-    plugins.lsp.servers.svelteserver = lib.mkIf cfg.lsp.enable {
+    plugins.lsp.servers.svelte = lib.mkIf cfg.lsp.enable {
       enable = true;
       extraOptions = cfg.lsp.settings;
       package =
