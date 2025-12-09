@@ -8,7 +8,22 @@
 in {
   options.languages.rust = {
     enable = lib.mkEnableOption "Enable Rust support";
-    lsp.enable = lib.mkEnableOption "Enable LSP for Rust" // {default = true;};
+    lsp = {
+      enable = lib.mkEnableOption "Enable LSP for Rust" // {default = true;};
+      settings = lib.mkOption {
+        type = with lib.types; attrOf anything;
+        default = {
+          cargo.allFeatures = true;
+          checkOnSave.command = "clippy";
+        };
+        description = "Configuration for rust-analyzer. See https://rust-analyzer.github.io/manual.html#configuration for options.";
+      };
+      package = lib.mkOption {
+        type = with lib.types; package;
+        default = pkgs.rust-analyzer;
+        description = "The rust-analyzer package to use";
+      };
+    };
     format = {
       enable = lib.mkEnableOption "Enable formatting for Rust" // {default = true;};
       package = lib.mkOption {
@@ -42,11 +57,14 @@ in {
         };
       };
     };
-    extraPackages = lib.mkIf cfg.lsp.enable [pkgs.rust-analyzer];
     plugins.lsp.servers.rust_analyzer = lib.mkIf cfg.lsp.enable {
       enable = true;
       installCargo = true;
       installRustc = true;
+      rustfmtPackage = lib.mkIf cfg.format.enable cfg.format.package;
+
+      extraOptions = cfg.lsp.settings;
+      package = cfg.lsp.package;
     };
   };
 }
