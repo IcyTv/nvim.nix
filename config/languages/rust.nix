@@ -51,7 +51,7 @@ in {
     #   };
     # };
     assertions = {
-      assertion = !(cfg.lsp.package != null && cfg.lsp.cmd != null);
+      assertion = !(cfg.lsp.package != null && cfg.lsp.command != null);
       message = "The options `language.rust.lsp.package` and `language.rust.lsp.command` are mutually exclusive. Using command will override the package anyways.";
     };
     plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
@@ -72,7 +72,6 @@ in {
       rustfmtPackage = lib.mkIf cfg.format.enable cfg.format.package;
 
       extraOptions = cfg.lsp.settings;
-      # package = lib.mkIf (cfg.lsp.command == null) cfg.lsp.
       package =
         if cfg.lsp.command == null
         then cfg.lsp.package
