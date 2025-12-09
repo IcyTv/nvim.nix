@@ -11,7 +11,7 @@ in {
     lsp = {
       enable = lib.mkEnableOption "Enable LSP for Rust" // {default = true;};
       settings = lib.mkOption {
-        type = with lib.types; attrOf anything;
+        type = with lib.types; attrsOf anything;
         default = {
           cargo.allFeatures = true;
           checkOnSave.command = "clippy";
