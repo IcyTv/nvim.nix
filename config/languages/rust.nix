@@ -19,7 +19,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    extraPackages = [pkgs.rust-analyzer];
     # programs.nixvim = {
     #   lsp.rust-analyzer = lib.mkIf cfg.lsp.enable {};
     #   format."rustfmt" = lib.mkIf cfg.format.enable {
@@ -35,6 +34,7 @@ in {
         "rustfmt".command = lib.getExe cfg.format.package;
       };
     };
+    extraPackages = lib.mkIf cfg.lsp.enable [pkgs.rust-analyzer];
     plugins.lsp.servers.rust_analyzer = lib.mkIf cfg.lsp.enable {
       enable = true;
       installCargo = true;

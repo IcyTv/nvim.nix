@@ -62,6 +62,7 @@
           default = import ./config;
           rust = import ./config/languages/rust.nix;
           nix = import ./config/languages/nix.nix;
+          shell = import ./config/languages/shell.nix;
         };
 
         # System-dependent library, created for each system
@@ -76,6 +77,7 @@
                 nixvimModules.default
                 nixvimModules.rust
                 nixvimModules.nix
+                nixvimModules.shell
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
               ];
@@ -94,6 +96,7 @@
               nixvimModules.default
               nixvimModules.rust
               nixvimModules.nix
+              nixvimModules.shell
             ];
           };
         };
