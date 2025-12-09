@@ -23,6 +23,10 @@ in {
         default = pkgs.rust-analyzer;
         description = "The rust-analyzer package to use";
       };
+      command = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = ["${cfg.lsp.package}/bin/rust-analyzer"];
+      };
     };
     format = {
       enable = lib.mkEnableOption "Enable formatting for Rust" // {default = true;};
@@ -46,6 +50,10 @@ in {
     #     package = cfg.format.package;
     #   };
     # };
+    assertions = {
+      assertion = !(cfg.lsp.package != null && cfg.lsp.cmd != null);
+      message = "The options `language.rust.lsp.package` and `language.rust.lsp.command` are mutually exclusive. Using command will override the package anyways.";
+    };
     plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
       formatters_by_ft = {
         rust = ["rustfmt"];
@@ -64,7 +72,12 @@ in {
       rustfmtPackage = lib.mkIf cfg.format.enable cfg.format.package;
 
       extraOptions = cfg.lsp.settings;
-      package = cfg.lsp.package;
+      # package = lib.mkIf (cfg.lsp.command == null) cfg.lsp.
+      package =
+        if cfg.lsp.command == null
+        then cfg.lsp.package
+        else lib.mkForce null;
+      cmd = cfg.lsp.command;
     };
   };
 }
