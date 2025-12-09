@@ -17,11 +17,10 @@
     nixvim,
     flake-parts,
     ...
-  } @ inputs:
-    let
-      # Define the list of systems once to share it
-      supportedSystems = ["x86_64-linux"];
-    in
+  } @ inputs: let
+    # Define the list of systems once to share it
+    supportedSystems = ["x86_64-linux"];
+  in
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = supportedSystems;
 
@@ -62,6 +61,7 @@
         nixvimModules = {
           default = import ./config;
           rust = import ./config/languages/rust.nix;
+          nix = import ./config/languages/nix.nix;
         };
 
         # System-dependent library, created for each system
@@ -75,6 +75,7 @@
               module = [
                 nixvimModules.default
                 nixvimModules.rust
+                nixvimModules.nix
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
               ];
@@ -92,6 +93,7 @@
             programs.nixvim.imports = [
               nixvimModules.default
               nixvimModules.rust
+              nixvimModules.nix
             ];
           };
         };
