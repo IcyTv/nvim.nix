@@ -18,7 +18,8 @@ in {
     };
   };
 
-  plugins.guess-indent.enable = true;
+  # plugins.guess-indent.enable = true;
+  plugins.sleuth.enable = true;
 
   keymaps = [
     {
