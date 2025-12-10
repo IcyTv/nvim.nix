@@ -7,6 +7,7 @@
     ./treesitter.nix
     ./telescope.nix
     ./completion.nix
+    ./default-keymaps.nix
     ./folds.nix
     ./format.nix
     ./lint.nix

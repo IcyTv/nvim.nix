@@ -12,7 +12,18 @@ in {
       enable = lib.mkEnableOption "Enable LSP for Tailwind CSS" // {default = true;};
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
-        default = {};
+        default = {
+          "files.exclude" = [
+            "**/.git/**"
+            "**/.svn/**"
+            "**/.hg/**"
+            "**/CVS/**"
+            "**/.DS_Store/**"
+            "**/node_modules/**"
+            "**/bower_components/**"
+            "**/.direnv/**"
+          ];
+        };
         description = "Configuration for tailwindcss-language-server. See https://github.com/tailwindlabs/tailwindcss-intellisense/blob/master/packages/tailwindcss-language-server/README.md#settings for options.";
       };
       package = lib.mkOption {
