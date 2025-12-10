@@ -58,7 +58,7 @@ in {
         };
       };
     };
-    plugins.lsp.servers.ts-ls = lib.mkIf cfg.lsp.enable {
+    plugins.lsp.servers.ts_ls = lib.mkIf cfg.lsp.enable {
       enable = true;
       extraOptions = cfg.lsp.settings;
       package =
