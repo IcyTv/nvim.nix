@@ -12,11 +12,14 @@
         "<C-y>" = "cmp.mapping.confirm()";
       };
       sources = [
+        {name = "copilot";}
         {name = "nvim_lua";}
         {name = "nvim_lsp";}
         {name = "async_path";}
         {name = "luasnip";}
+        {name = "treesitter";}
         {name = "buffer";}
+        {name = "spell";}
       ];
       window.documentation.border = [
         "╭"
@@ -31,9 +34,11 @@
     };
   };
 
+  plugins.copilot-cmp.enable = true;
   plugins.cmp-buffer.enable = true;
   plugins.cmp-nvim-lsp.enable = true;
   plugins.cmp-nvim-lua.enable = true;
   plugins.cmp-async-path.enable = true;
   plugins.luasnip.enable = true;
+  plugins.cmp-spell.enable = true;
 }
