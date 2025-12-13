@@ -6,6 +6,7 @@
         "<leader>j" = "goto_next";
         "<leader>k" = "goto_prev";
         "<leader>cd" = "open_float";
+        "<leader>ca" = "quickfix";
       };
 
       lspBuf = {

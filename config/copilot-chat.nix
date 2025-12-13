@@ -53,7 +53,7 @@
   keymaps = [
     {
       mode = ["n" "v"];
-      key = "<leader>ca";
+      key = "<leader>aa";
       action = "<cmd>CopilotChatToggle<CR>";
       options.desc = "Format file or range (in visual mode)";
     }
