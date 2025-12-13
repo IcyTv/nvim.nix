@@ -13,6 +13,7 @@
     ./lint.nix
     ./style.nix
     ./lsp.nix
+    ./copilot-chat.nix
   ];
 
   config = {

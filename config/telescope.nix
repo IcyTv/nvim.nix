@@ -143,6 +143,7 @@
       zoxide.enable = true;
       undo.enable = true;
       manix.enable = true;
+      ui-select.enable = true;
     };
   };
 
