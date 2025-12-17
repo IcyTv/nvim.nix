@@ -41,6 +41,12 @@
       fugitive.enable = true;
       nvim-tree.enable = true;
     };
+    plugins.image = {
+      enable = true;
+      settings = {
+        backend = "kitty";
+      };
+    };
 
     extraPackages = [
       pkgs.nerd-fonts.jetbrains-mono
