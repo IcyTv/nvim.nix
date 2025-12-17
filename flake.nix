@@ -29,15 +29,19 @@
         system,
         ...
       }: let
+        unfreePkgs = import inputs.nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
         # Call the library function from the final flake outputs
         nvim = inputs.self.lib.${system}.makeNeovimWithLanguages {
-          inherit pkgs;
+          pkgs = unfreePkgs;
           languages = {};
         };
       in {
         packages.default = nvim;
 
-        devShells.default = pkgs.mkShellNoCC {
+        devShells.default = unfreePkgs.mkShellNoCC {
           shellHook =
             #bash
             ''
