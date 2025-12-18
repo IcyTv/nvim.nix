@@ -12,13 +12,13 @@
     {
       mode = "n";
       key = "<leader>aa";
-      command = ":Sidekick toggle<cr>";
+      action = ":Sidekick cli toggle<cr>";
       options.desc = "Toggle Sidekick";
     }
     {
       mode = "n";
       key = "<leader>ap";
-      command = ":Sidekick prompt<cr>";
+      action = ":Sidekick cli prompt<cr>";
       options.desc = "Sidekick Prompt";
     }
   ];
