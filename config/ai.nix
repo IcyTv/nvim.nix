@@ -3,7 +3,7 @@
     enable = true;
     settings = {
       nes = {
-        enable = false;
+        enabled = false;
       };
     };
   };
