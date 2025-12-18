@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
+    ./ai.nix
     ./treesitter.nix
     ./telescope.nix
     ./completion.nix
@@ -13,7 +14,6 @@
     ./lint.nix
     ./style.nix
     ./lsp.nix
-    ./copilot-chat.nix
   ];
 
   config = {

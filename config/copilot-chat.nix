@@ -1,3 +1,0 @@
-{...}: {
-  plugins.sidekick.enable = true;
-}
