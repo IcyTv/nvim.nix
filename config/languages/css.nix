@@ -30,7 +30,6 @@ in {
       };
     };
 
-    extraPackages = lib.mkIf cfg.lsp.enable [pkgs.css-language-server];
     plugins.lsp.servers.cssls.enable = cfg.lsp.enable;
   };
 }
