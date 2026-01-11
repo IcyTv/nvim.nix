@@ -36,7 +36,9 @@
         # Call the library function from the final flake outputs
         nvim = inputs.self.lib.${system}.makeNeovimWithLanguages {
           pkgs = unfreePkgs;
-          languages = {};
+          languages = {
+            nix.enable = true;
+          };
         };
       in {
         packages.default = nvim;

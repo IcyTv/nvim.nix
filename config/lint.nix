@@ -54,7 +54,7 @@
     {
       mode = ["n"];
       key = "<leader>cl";
-      action = ":lua require(\"lint\").try_lint()<CR>";
+      action = lib.nixvim.mkRaw ''function() require("lint").try_lint() end'';
       options.desc = "[c]ode [lint] the current buffer";
     }
   ];

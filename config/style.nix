@@ -72,6 +72,7 @@
       key = "<leader>e";
       action = "<cmd>NvimTreeToggle<CR>";
       options.desc = "[ ] Open file [e]xplorer";
+      options.silent = true;
     }
   ];
 }

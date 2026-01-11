@@ -25,7 +25,7 @@ in {
     {
       mode = ["n" "v"];
       key = "<leader>cf";
-      action = ":lua _G.format_with_conform()<CR>";
+      action = lib.nixvim.mkRaw "function() _G.format_with_conform() end";
       options.desc = "Format file or range (in visual mode)";
     }
   ];
