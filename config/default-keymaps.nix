@@ -201,7 +201,7 @@ in {
       key = "<esc>";
       action = lib.nixvim.mkRaw ''        function()
           vim.cmd("noh")
-          require("cmp").actions.snippet_stop()
+          -- require("cmp").actions.snippet_stop()
           return "<esc>"
         end'';
       options = {

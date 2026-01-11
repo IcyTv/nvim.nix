@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{lib, ...}: {
   colorschemes.catppuccin = {
     enable = true;
     settings = {
@@ -32,7 +32,47 @@
   plugins.dashboard = {
     enable = true;
     settings = {
-      project.enable = true;
+      change_vcs_root = true;
+      config = {
+        project.enable = false;
+        mru = {
+          enable = true;
+          limit = 10;
+          cwd_only = true;
+        };
+        packages.enable = true;
+        week_header.enable = true;
+
+        shortcut = [
+          {
+            action = lib.nixvim.mkRaw ''function() vim.cmd('Telescope find_files') end'';
+            desc = "Files";
+            group = "Label";
+            icon = " ";
+            icon_hl = "@variable";
+            key = "f";
+          }
+          {
+            action = "Telescope zoxide list";
+            desc = " Folders";
+            group = "DiagnosticHint";
+            key = "z";
+          }
+          {
+            # TODO read from cwd on build or something. Idk...
+            action = "Telescope find_files cwd=~/projects/nvim.nix";
+            desc = "󰊢 Neovim Config Files";
+            group = "DiagnosticHint";
+            key = "c";
+          }
+          {
+            action = "Telescope find_files cwd=~/.dotfiles/nix";
+            desc = " dotfiles";
+            group = "Number";
+            key = "d";
+          }
+        ];
+      };
     };
   };
 
