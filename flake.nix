@@ -66,6 +66,7 @@
         # Nixvim modules used by the library function
         nixvimModules = {
           default = import ./config;
+          css = import ./config/languages/css.nix;
           rust = import ./config/languages/rust.nix;
           nix = import ./config/languages/nix.nix;
           shell = import ./config/languages/shell.nix;
@@ -84,6 +85,7 @@
               inherit pkgs;
               module = [
                 nixvimModules.default
+                nixvimModules.css
                 nixvimModules.rust
                 nixvimModules.nix
                 nixvimModules.shell
@@ -106,6 +108,7 @@
           config = lib.mkIf config.programs.nixvim.enable {
             programs.nixvim.imports = [
               nixvimModules.default
+              nixvimModules.css
               nixvimModules.rust
               nixvimModules.nix
               nixvimModules.shell
