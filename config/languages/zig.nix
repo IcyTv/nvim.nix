@@ -27,15 +27,6 @@ in
       };
     };
 
-    extraFormatOptions = {
-      # Zig fmt is part of the zig binary
-      command = lib.mkOption {
-        type = lib.types.str;
-        default = "${lib.getBin pkgs.zig}/bin/zig fmt";
-        description = "Command to run formatter";
-      };
-    };
-
     extraLspOptions = {
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
@@ -64,20 +55,10 @@ in
       # Apply toolchain defaults if set
       languages.zig = lib.mkIf (cfg.package != null) {
         format.package = lib.mkDefault cfg.package;
-        format.command = lib.mkDefault "${lib.getBin cfg.package}/bin/zig fmt";
+        # mkLang will automatically update format.command to match the new package
         
         # We can't strictly force LSP package because `zig` usually doesn't include `zls`.
-        # But if the user passed a "toolchain" (often an environment containing both), we might want to try.
-        # Let's leave LSP alone unless explicit.
       };
-
-      # conform-nvim needs to know zig fmt modifies file in place or stdout? 
-      # conform has a 'zigfmt' preset. It uses `zig fmt --stdin`.
-      # We just need to point to the zig binary.
-      plugins.conform-nvim.settings.formatters."zigfmt".command = 
-        if cfg.format.package != null 
-        then "${lib.getBin cfg.format.package}/bin/zig"
-        else "zig";
 
       plugins.lsp.servers.zls = {
         cmd = cfg.lsp.command;
