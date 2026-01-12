@@ -79,6 +79,9 @@ This configuration is **opinionated**. Most core plugins (Treesitter, Telescope,
 Each language (e.g., `languages.rust`, `languages.c`) supports the following standard options:
 
 *   `enable` (bool): Enable the language stack.
+
+**Note:** `languages.nix` is enabled by default (via `mkDefault`) since this configuration is primarily designed for Nix-based development workflows. You can disable it explicitly by setting `languages.nix.enable = false`.
+
 *   `lsp.enable` (bool): Enable LSP support (default: true).
 *   `lsp.package` (package): Override the LSP package (set to `null` to use PATH).
 *   `format.enable` (bool): Enable auto-formatting (default: true).

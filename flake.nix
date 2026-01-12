@@ -112,7 +112,11 @@
                 nixvimModules.python
                 nixvimModules.lua
                 # This module sets the configuration based on the function's input.
-                {config.languages = languages;}
+                {
+                  config.languages = languages;
+                  # Enable Nix by default as this is intended for devshells
+                  config.languages.nix.enable = pkgs.lib.mkDefault true;
+                }
                 extraConfig
               ];
             };
