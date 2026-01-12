@@ -66,6 +66,7 @@
         # Nixvim modules used by the library function
         nixvimModules = {
           default = import ./config;
+          prettier = import ./config/languages/prettier.nix;
           css = import ./config/languages/css.nix;
           rust = import ./config/languages/rust.nix;
           nix = import ./config/languages/nix.nix;
@@ -73,6 +74,12 @@
           typescript = import ./config/languages/typescript.nix;
           tailwind = import ./config/languages/tailwind.nix;
           svelte = import ./config/languages/svelte.nix;
+          toml = import ./config/languages/toml.nix;
+          json = import ./config/languages/json.nix;
+          yaml = import ./config/languages/yaml.nix;
+          html = import ./config/languages/html.nix;
+          c = import ./config/languages/c.nix;
+          zig = import ./config/languages/zig.nix;
         };
 
         # System-dependent library, created for each system
@@ -86,6 +93,7 @@
               inherit pkgs;
               module = [
                 nixvimModules.default
+                nixvimModules.prettier
                 nixvimModules.css
                 nixvimModules.rust
                 nixvimModules.nix
@@ -93,6 +101,12 @@
                 nixvimModules.typescript
                 nixvimModules.tailwind
                 nixvimModules.svelte
+                nixvimModules.toml
+                nixvimModules.json
+                nixvimModules.yaml
+                nixvimModules.html
+                nixvimModules.c
+                nixvimModules.zig
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
                 extraConfig
@@ -110,6 +124,7 @@
           config = lib.mkIf config.programs.nixvim.enable {
             programs.nixvim.imports = [
               nixvimModules.default
+              nixvimModules.prettier
               nixvimModules.css
               nixvimModules.rust
               nixvimModules.nix
@@ -117,6 +132,12 @@
               nixvimModules.typescript
               nixvimModules.tailwind
               nixvimModules.svelte
+              nixvimModules.toml
+              nixvimModules.json
+              nixvimModules.yaml
+              nixvimModules.html
+              nixvimModules.c
+              nixvimModules.zig
             ];
           };
         };

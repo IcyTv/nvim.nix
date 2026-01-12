@@ -9,14 +9,14 @@ in
   utils.mkLang {
     name = "tailwind";
     description = "Enable Tailwind CSS support";
-    filetypes = ["tailwind"]; # Note: formatter isn't auto-assigned by mkLang because we customize it below
+    filetypes = ["tailwind"]; # Note: formatter isn't auto-assigned by mkLang because we customize it
     lsp = {
       server = "tailwindcss";
       package = pkgs.tailwindcss-language-server;
     };
     format = {
-      tool = "prettier-tailwind";
-      package = pkgs.nodePackages.prettier;
+      tool = "prettierd";
+      package = pkgs.prettierd;
     };
 
     extraLspOptions = {
@@ -34,7 +34,7 @@ in
             "**/.direnv/**"
           ];
         };
-        description = "Configuration for tailwindcss-language-server. See https://github.com/tailwindlabs/tailwindcss-intellisense/blob/master/packages/tailwindcss-language-server/README.md#settings for options.";
+        description = "Configuration for tailwindcss-language-server.";
       };
       command = lib.mkOption {
         type = with lib.types; nullOr (listOf str);
@@ -45,13 +45,14 @@ in
     extraFormatOptions = {
       args = lib.mkOption {
         type = with lib.types; listOf str;
-        default = ["--plugin=prettier-plugin-tailwindcss" "--parser" "css"];
-        description = "Additional arguments to pass to the prettier command for tailwind.";
+        default = [];
+        description = "Additional arguments to pass to the prettierd command.";
       };
     };
 
     extraConfig = cfg: {
-      plugins.conform-nvim.settings.formatters."prettier-tailwind".args = cfg.format.args;
+      # Tailwind is often a plugin for other languages, but if there's a specific 'tailwind' filetype:
+      plugins.conform-nvim.settings.formatters_by_ft.tailwind = ["prettierd"];
 
       plugins.lsp.servers.tailwindcss = {
         extraOptions = cfg.lsp.settings;

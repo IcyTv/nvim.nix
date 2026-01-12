@@ -9,14 +9,14 @@ in
   utils.mkLang {
     name = "typescript";
     description = "Enable TypeScript/JavaScript support";
-    # We don't pass filetypes here because we define formatters manually for multiple types
+    # We define formatters manually for multiple types, but all use prettierd
     lsp = {
       server = "ts_ls";
       package = pkgs.typescript-language-server;
     };
     format = {
-      tool = "prettier-js"; # Dummy default, we override formatters below
-      package = pkgs.nodePackages.prettier;
+      tool = "prettierd"; 
+      package = pkgs.prettierd;
     };
 
     extraLspOptions = {
@@ -31,32 +31,15 @@ in
       };
     };
 
-    extraFormatOptions = {
-      args = lib.mkOption {
-        type = with lib.types; listOf str;
-        default = [];
-        description = "Additional arguments to pass to the prettier command.";
-      };
-    };
-
     extraConfig = cfg: {
       plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
         formatters_by_ft = {
-          javascript = ["prettier-js"];
-          typescript = ["prettier-ts"];
-          javascriptreact = ["prettier-js"];
-          typescriptreact = ["prettier-ts"];
+          javascript = ["prettierd"];
+          typescript = ["prettierd"];
+          javascriptreact = ["prettierd"];
+          typescriptreact = ["prettierd"];
         };
-        formatters = {
-          "prettier-js" = {
-            command = cfg.format.command;
-            args = cfg.format.args ++ ["--parser" "babel"];
-          };
-          "prettier-ts" = {
-            command = cfg.format.command;
-            args = cfg.format.args ++ ["--parser" "typescript"];
-          };
-        };
+        # No custom formatters needed, conform uses prettierd defaults
       };
 
       plugins.lsp.servers.ts_ls = {
