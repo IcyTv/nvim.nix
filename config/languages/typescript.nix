@@ -18,6 +18,10 @@ in
       tool = "prettierd"; 
       package = pkgs.prettierd;
     };
+    lint = {
+      tool = "eslint_d";
+      package = pkgs.eslint_d;
+    };
 
     extraLspOptions = {
       settings = lib.mkOption {

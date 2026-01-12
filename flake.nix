@@ -81,6 +81,7 @@
           c = import ./config/languages/c.nix;
           zig = import ./config/languages/zig.nix;
           python = import ./config/languages/python.nix;
+          lua = import ./config/languages/lua.nix;
         };
 
         # System-dependent library, created for each system
@@ -109,6 +110,7 @@
                 nixvimModules.c
                 nixvimModules.zig
                 nixvimModules.python
+                nixvimModules.lua
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
                 extraConfig
@@ -141,6 +143,7 @@
               nixvimModules.c
               nixvimModules.zig
               nixvimModules.python
+              nixvimModules.lua
             ];
           };
         };

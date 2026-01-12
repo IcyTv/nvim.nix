@@ -18,6 +18,10 @@ in
       tool = "prettierd";
       package = pkgs.prettierd;
     };
+    lint = {
+      tool = "jsonlint";
+      package = pkgs.python313Packages.demjson3;
+    };
   } {
     inherit pkgs lib config;
   }

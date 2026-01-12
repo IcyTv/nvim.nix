@@ -5,8 +5,10 @@
     description ? "Enable ${name} support",
     lsp ? null, # { server = "serverName"; package = pkgs.package; }
     format ? null, # { tool = "toolName"; package = pkgs.package; }
+    lint ? null, # { tool = "toolName"; package = pkgs.package; }
     extraLspOptions ? {},
     extraFormatOptions ? {},
+    extraLintOptions ? {},
     extraOptions ? {},
     extraConfig ? cfg: {},
   }: {
@@ -17,6 +19,7 @@
     cfg = config.languages.${name};
     defaultLspPackage = lsp.package or null;
     defaultFormatPackage = format.package or null;
+    defaultLintPackage = lint.package or null;
   in {
     options.languages.${name} =
       {
@@ -51,6 +54,25 @@
             };
           }
           // extraFormatOptions;
+
+        lint =
+          {
+            enable = lib.mkEnableOption "Enable linting" // {default = true;};
+            package = lib.mkOption {
+              type = with lib.types; nullOr package;
+              default = defaultLintPackage;
+              description = "Linter package to use. Set to null to use the one in your PATH.";
+            };
+            command = lib.mkOption {
+              type = lib.types.str;
+              default =
+                if cfg.lint.package != null
+                then lib.getExe cfg.lint.package
+                else lint.tool;
+              description = "Command to run linter";
+            };
+          }
+          // extraLintOptions;
       }
       // extraOptions;
 
@@ -69,6 +91,16 @@
           formatters_by_ft = lib.genAttrs filetypes (_: [format.tool]);
           formatters.${format.tool} = {
             command = cfg.format.command;
+          };
+        };
+      })
+
+      # Lint Configuration
+      (lib.mkIf (lint != null && cfg.lint.enable) {
+        plugins.lint = {
+          lintersByFt = lib.genAttrs filetypes (_: [lint.tool]);
+          linters.${lint.tool} = {
+            cmd = cfg.lint.command;
           };
         };
       })

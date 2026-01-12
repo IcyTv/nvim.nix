@@ -18,6 +18,10 @@ in
       tool = "shfmt";
       package = pkgs.shfmt;
     };
+    lint = {
+      tool = "shellcheck";
+      package = pkgs.shellcheck;
+    };
   } {
     inherit pkgs lib config;
   }

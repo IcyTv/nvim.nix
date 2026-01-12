@@ -18,6 +18,10 @@ in
       tool = "prettierd";
       package = pkgs.prettierd;
     };
+    lint = {
+      tool = "yamllint";
+      package = pkgs.yamllint;
+    };
     extraConfig = cfg: {
       plugins.schemastore = {
         enable = true;
