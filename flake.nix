@@ -80,6 +80,7 @@
           makeNeovimWithLanguages = {
             pkgs,
             languages ? {},
+            extraConfig ? {},
           }:
             nixvim.legacyPackages.${system}.makeNixvimWithModule {
               inherit pkgs;
@@ -94,6 +95,7 @@
                 nixvimModules.svelte
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
+                extraConfig
               ];
             };
         });
