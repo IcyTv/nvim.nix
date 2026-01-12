@@ -32,6 +32,8 @@ in
     };
 
     extraConfig = cfg: {
+      languages.json.enable = lib.mkDefault true;
+
       plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
         formatters_by_ft = {
           javascript = ["prettierd"];

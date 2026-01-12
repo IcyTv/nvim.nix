@@ -41,6 +41,11 @@ in
     };
 
     extraConfig = cfg: {
+      languages.typescript.enable = lib.mkDefault true;
+      languages.json.enable = lib.mkDefault true;
+      languages.css.enable = lib.mkDefault true;
+      languages.html.enable = lib.mkDefault true;
+
       # If args are provided, we must define a custom formatter alias because 
       # the default 'prettierd' definition in conform doesn't have our custom args.
       # But if args is empty, we can use standard 'prettierd'.

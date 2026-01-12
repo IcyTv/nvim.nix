@@ -80,6 +80,7 @@
           html = import ./config/languages/html.nix;
           c = import ./config/languages/c.nix;
           zig = import ./config/languages/zig.nix;
+          python = import ./config/languages/python.nix;
         };
 
         # System-dependent library, created for each system
@@ -107,6 +108,7 @@
                 nixvimModules.html
                 nixvimModules.c
                 nixvimModules.zig
+                nixvimModules.python
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
                 extraConfig
@@ -138,6 +140,7 @@
               nixvimModules.html
               nixvimModules.c
               nixvimModules.zig
+              nixvimModules.python
             ];
           };
         };

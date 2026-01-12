@@ -51,6 +51,9 @@ in
     };
 
     extraConfig = cfg: {
+      languages.css.enable = lib.mkDefault true;
+      languages.html.enable = lib.mkDefault true;
+
       # Tailwind is often a plugin for other languages, but if there's a specific 'tailwind' filetype:
       plugins.conform-nvim.settings.formatters_by_ft.tailwind = ["prettierd"];
 

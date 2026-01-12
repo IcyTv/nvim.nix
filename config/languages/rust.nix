@@ -52,6 +52,8 @@ in
     };
 
     extraConfig = cfg: {
+      languages.toml.enable = lib.mkDefault true;
+
       # Apply toolchain defaults if set
       languages.rust = lib.mkIf (cfg.toolchain != null) {
         lsp.package = lib.mkDefault cfg.toolchain;
