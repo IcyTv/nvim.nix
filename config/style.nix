@@ -25,6 +25,11 @@
     settings = {
       iconsEnabled = true;
       globalstatus = true;
+      sections = {
+        lualine_z = lib.nixvim.mkRaw ''          {
+                    require("opencode").statusline
+                  }'';
+      };
     };
   };
   plugins.bufferline.enable = true;

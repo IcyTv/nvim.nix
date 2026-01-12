@@ -4,7 +4,15 @@
     silent = true;
   };
 in {
-  plugins.snacks.enable = true;
+  plugins.snacks = {
+    enable = true;
+    settings = {
+      bigfile.enabled = true;
+      input.enabled = true;
+      picker.enabled = true;
+      terminal.enabled = true;
+    };
+  };
 
   keymaps = [
     # Better up/down from LazyVim
