@@ -4,75 +4,72 @@
   config,
   ...
 }: let
-  cfg = config.languages.rust;
-in {
-  options.languages.rust = {
-    enable = lib.mkEnableOption "Enable Rust support";
+  utils = import ./utils.nix {inherit lib;};
+in
+  utils.mkLang {
+    name = "rust";
+    description = "Enable Rust support";
     lsp = {
-      enable = lib.mkEnableOption "Enable LSP for Rust" // {default = true;};
+      server = "rust_analyzer";
+      package = pkgs.rust-analyzer;
+    };
+    format = {
+      tool = "rustfmt";
+      package = pkgs.rustfmt;
+    };
+
+    extraOptions = {
+      toolchain = lib.mkOption {
+        type = with lib.types; nullOr package;
+        default = null;
+        description = "Rust toolchain package (e.g. pkgs.rust-bin.stable.latest.default) to use for both LSP and formatting.";
+      };
+    };
+
+    extraLspOptions = {
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
         default = {
           cargo.allFeatures = true;
-          checkOnSave.command = "clippy";
+          check.command = "clippy";
         };
         description = "Configuration for rust-analyzer. See https://rust-analyzer.github.io/manual.html#configuration for options.";
-      };
-      package = lib.mkOption {
-        type = with lib.types; package;
-        default = pkgs.rust-analyzer;
-        description = "The rust-analyzer package to use";
       };
       command = lib.mkOption {
         type = with lib.types; nullOr (listOf str);
         default = null;
       };
+      installCargo = lib.mkEnableOption "Install cargo globally" // {default = false;};
+      installRustc = lib.mkEnableOption "Install rustc globally" // {default = false;};
     };
-    format = {
-      enable = lib.mkEnableOption "Enable formatting for Rust" // {default = true;};
-      package = lib.mkOption {
-        type = with lib.types; package;
-        default = pkgs.rustfmt;
-      };
+
+    extraFormatOptions = {
       args = lib.mkOption {
         type = with lib.types; listOf str;
         default = [];
         description = "Additional arguments to pass to the rustfmt command.";
       };
     };
-  };
 
-  config = lib.mkIf cfg.enable {
-    # programs.nixvim = {
-    #   lsp.rust-analyzer = lib.mkIf cfg.lsp.enable {};
-    #   format."rustfmt" = lib.mkIf cfg.format.enable {
-    #     enable = true;
-    #     package = cfg.format.package;
-    #   };
-    # };
-    plugins.conform-nvim.settings = lib.mkIf cfg.format.enable {
-      formatters_by_ft = {
-        rust = ["rustfmt"];
+    extraConfig = cfg: {
+      # Apply toolchain defaults if set
+      languages.rust = lib.mkIf (cfg.toolchain != null) {
+        lsp.package = lib.mkDefault cfg.toolchain;
+        lsp.command = lib.mkDefault ["${cfg.toolchain}/bin/rust-analyzer"];
+        format.package = lib.mkDefault cfg.toolchain;
+        format.command = lib.mkDefault "${cfg.toolchain}/bin/rustfmt";
       };
-      formatters = {
-        "rustfmt" = {
-          command = lib.getExe cfg.format.package;
-          args = cfg.format.args;
-        };
+
+      plugins.conform-nvim.settings.formatters."rustfmt".args = cfg.format.args;
+
+      plugins.lsp.servers.rust_analyzer = {
+        installCargo = cfg.lsp.installCargo;
+        installRustc = cfg.lsp.installRustc;
+        rustfmtPackage = lib.mkIf cfg.format.enable cfg.format.package;
+        extraOptions = cfg.lsp.settings;
+        cmd = cfg.lsp.command;
       };
     };
-    plugins.lsp.servers.rust_analyzer = lib.mkIf cfg.lsp.enable {
-      enable = true;
-      installCargo = true;
-      installRustc = true;
-      rustfmtPackage = lib.mkIf cfg.format.enable cfg.format.package;
-
-      extraOptions = cfg.lsp.settings;
-      package =
-        if cfg.lsp.command == null
-        then cfg.lsp.package
-        else lib.mkForce null;
-      cmd = cfg.lsp.command;
-    };
-  };
-}
+  } {
+    inherit pkgs lib config;
+  }
