@@ -20,10 +20,10 @@ in
     };
 
     extraOptions = {
-      toolchain = lib.mkOption {
+      package = lib.mkOption {
         type = with lib.types; nullOr package;
         default = null;
-        description = "Zig toolchain package to use for both LSP (zls) and formatting (zig). Useful for zls/zig version matching.";
+        description = "Zig package to use for formatting (zig). Useful for matching the compiler version.";
       };
     };
 
@@ -62,15 +62,9 @@ in
       ];
 
       # Apply toolchain defaults if set
-      languages.zig = lib.mkIf (cfg.toolchain != null) {
-        # If toolchain is set, we assume it provides both `zig` and `zls` (common in zig-overlay)
-        # OR the user should override lsp.package separately if their toolchain only provides zig.
-        # But for 'sane defaults', assuming toolchain has both is reasonable if it's an overlay environment.
-        # However, standard `zig` package doesn't have `zls`. 
-        # So we only set `lsp.package` if it looks like it might have zls, or we just trust the user.
-        # Safer: Set format.package (the compiler).
-        format.package = lib.mkDefault cfg.toolchain;
-        format.command = lib.mkDefault "${lib.getBin cfg.toolchain}/bin/zig fmt";
+      languages.zig = lib.mkIf (cfg.package != null) {
+        format.package = lib.mkDefault cfg.package;
+        format.command = lib.mkDefault "${lib.getBin cfg.package}/bin/zig fmt";
         
         # We can't strictly force LSP package because `zig` usually doesn't include `zls`.
         # But if the user passed a "toolchain" (often an environment containing both), we might want to try.
