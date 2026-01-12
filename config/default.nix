@@ -21,6 +21,9 @@
       mapleader = " ";
     };
 
+    # Disable the version check to allow consuming this flake with different nixpkgs versions
+    version.enableNixpkgsReleaseCheck = false;
+
     opts = {
       number = true;
       relativenumber = true;
