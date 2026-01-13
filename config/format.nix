@@ -39,6 +39,24 @@ in {
   # Explicitly enable automatic detection (default is 1, but setting for clarity)
   globals.sleuth_automatic = 1;
 
+  userCommands = {
+    W = {
+      command = "noautocmd w<bang>";
+      bang = true;
+      desc = "Write without formatting";
+    };
+    Wq = {
+      command = "noautocmd wq<bang>";
+      bang = true;
+      desc = "Write and quit without formatting";
+    };
+    Wqa = {
+      command = "noautocmd wqa<bang>";
+      bang = true;
+      desc = "Write all and quit without formatting";
+    };
+  };
+
   keymaps = [
     {
       mode = ["n" "v"];
