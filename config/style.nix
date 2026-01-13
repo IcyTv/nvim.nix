@@ -26,9 +26,11 @@
       iconsEnabled = true;
       globalstatus = true;
       sections = {
-        lualine_z = lib.nixvim.mkRaw ''          {
-                    require("opencode").statusline
-                  }'';
+        lualine_z = lib.nixvim.mkRaw ''
+          {
+              require("opencode").statusline
+          }
+        '';
       };
     };
   };

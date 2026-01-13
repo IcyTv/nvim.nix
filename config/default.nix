@@ -28,6 +28,8 @@
       number = true;
       relativenumber = true;
       tabstop = 4;
+      shiftwidth = 4;
+      expandtab = false;
       wrap = false;
       hlsearch = false;
       incsearch = true;
@@ -37,6 +39,8 @@
       updatetime = 50;
       foldlevel = 99;
     };
+
+    editorconfig.enable = true;
 
     plugins = {
       gitsigns.enable = true;
