@@ -11,6 +11,12 @@
         "<CR>" = "cmp.mapping.confirm()";
         "<C-y>" = "cmp.mapping.confirm()";
       };
+      performance = {
+        async_budget = 1;
+        debounce = 60;
+        throttle = 30;
+        fetchingTimeout = 200;
+      };
       sources = [
         {name = "copilot";}
         {name = "nvim_lua";}
