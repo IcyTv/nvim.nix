@@ -11,8 +11,8 @@ in
     filetypes = ["kotlin"];
     description = "Enable Kotlin support";
     lsp = {
-      server = "kotlin_language_server";
-      package = pkgs.kotlin-language-server;
+      server = "kotlin_lsp";
+      package = null;
     };
     format = {
       tool = "ktfmt";
@@ -27,7 +27,7 @@ in
       toolchain = lib.mkOption {
         type = with lib.types; nullOr package;
         default = null;
-        description = "Kotlin toolchain package (for example pkgs.kotlin) to expose as KOTLIN_HOME for kotlin-language-server.";
+        description = "Kotlin toolchain package (for example pkgs.kotlin) to expose as KOTLIN_HOME for the Kotlin language server.";
       };
     };
 
@@ -35,7 +35,7 @@ in
       command = lib.mkOption {
         type = with lib.types; nullOr (listOf str);
         default = null;
-        description = "Command to start kotlin-language-server. Set this to use a different server build.";
+        description = "Command to start the Kotlin language server. Set this to use a specific server binary.";
       };
     };
 
@@ -46,11 +46,11 @@ in
         lsp.command = lib.mkDefault [
           "env"
           "KOTLIN_HOME=${cfg.toolchain}"
-          (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-language-server")
+          (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-lsp")
         ];
       };
 
-      plugins.lsp.servers.kotlin_language_server = {
+      plugins.lsp.servers.kotlin_lsp = {
         cmd = cfg.lsp.command;
       };
     };
