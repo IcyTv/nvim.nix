@@ -18,19 +18,17 @@
 
     nativeBuildInputs = [
       pkgs.makeWrapper
-      pkgs.autoPatchelfHook
     ];
 
-    buildInputs = [
-      pkgs.jdk21
-      pkgs.stdenv.cc.cc.lib
-    ];
+    buildInputs = [pkgs.jdk21];
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/bin $out/share/kotlin-lsp
       cp -r ./* $out/share/kotlin-lsp
+
+      rm -rf $out/share/kotlin-lsp/jre
 
       chmod +x $out/share/kotlin-lsp/kotlin-lsp.sh
       substituteInPlace $out/share/kotlin-lsp/kotlin-lsp.sh \
