@@ -5,6 +5,42 @@
   ...
 }: let
   utils = import ./utils.nix {inherit lib;};
+  kotlinLspVersion = "262.2310.0";
+  kotlinLsp = pkgs.stdenvNoCC.mkDerivation {
+    pname = "kotlin-lsp";
+    version = kotlinLspVersion;
+
+    src = pkgs.fetchzip {
+      url = "https://download-cdn.jetbrains.com/kotlin-lsp/${kotlinLspVersion}/kotlin-lsp-${kotlinLspVersion}-linux-x64.zip";
+      hash = "sha256-wAQkIVj0teHZF93YSOb2onlIT6WKPivOiEa4B9GtFrE=";
+      stripRoot = false;
+    };
+
+    nativeBuildInputs = [
+      pkgs.makeWrapper
+      pkgs.autoPatchelfHook
+    ];
+
+    buildInputs = [
+      pkgs.jdk21
+      pkgs.stdenv.cc.cc.lib
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin $out/share/kotlin-lsp
+      cp -r ./* $out/share/kotlin-lsp
+
+      chmod +x $out/share/kotlin-lsp/kotlin-lsp.sh
+      substituteInPlace $out/share/kotlin-lsp/kotlin-lsp.sh \
+        --replace-fail 'LOCAL_JRE_PATH="$DIR/jre/Contents/Home"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"' \
+        --replace-fail 'LOCAL_JRE_PATH="$DIR/jre"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"'
+      makeWrapper $out/share/kotlin-lsp/kotlin-lsp.sh $out/bin/kotlin-lsp
+
+      runHook postInstall
+    '';
+  };
 in
   utils.mkLang {
     name = "kotlin";
@@ -12,7 +48,7 @@ in
     description = "Enable Kotlin support";
     lsp = {
       server = "kotlin_lsp";
-      package = null;
+      package = kotlinLsp;
     };
     format = {
       tool = "ktfmt";
