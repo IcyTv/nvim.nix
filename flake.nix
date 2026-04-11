@@ -82,6 +82,7 @@
           zig = import ./config/languages/zig.nix;
           python = import ./config/languages/python.nix;
           lua = import ./config/languages/lua.nix;
+          kotlin = import ./config/languages/kotlin.nix;
         };
 
         # System-dependent library, created for each system
@@ -111,6 +112,7 @@
                 nixvimModules.zig
                 nixvimModules.python
                 nixvimModules.lua
+                nixvimModules.kotlin
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
                 {config.languages.nix.enable = pkgs.lib.mkDefault true;}
@@ -145,6 +147,7 @@
               nixvimModules.zig
               nixvimModules.python
               nixvimModules.lua
+              nixvimModules.kotlin
             ];
           };
         };
