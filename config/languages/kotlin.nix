@@ -97,7 +97,7 @@ in
       };
 
       plugins.conform-nvim.settings.formatters.ktfmt = {
-        args = cfg.format.args ++ ["--stdin-name" "$FILENAME"];
+        args = cfg.format.args ++ ["-"];
         stdin = true;
       };
     };
