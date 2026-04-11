@@ -22,6 +22,9 @@ in
       tool = "checkstyle";
       package = pkgs.checkstyle;
     };
+    extraConfig = cfg: {
+      languages.gradle.enable = lib.mkDefault true;
+    };
   } {
     inherit pkgs lib config;
   }

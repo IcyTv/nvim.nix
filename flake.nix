@@ -84,6 +84,7 @@
           lua = import ./config/languages/lua.nix;
           kotlin = import ./config/languages/kotlin.nix;
           java = import ./config/languages/java.nix;
+          gradle = import ./config/languages/gradle.nix;
         };
 
         # System-dependent library, created for each system
@@ -115,6 +116,7 @@
                 nixvimModules.lua
                 nixvimModules.kotlin
                 nixvimModules.java
+                nixvimModules.gradle
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
                 {config.languages.nix.enable = pkgs.lib.mkDefault true;}
@@ -151,6 +153,7 @@
               nixvimModules.lua
               nixvimModules.kotlin
               nixvimModules.java
+              nixvimModules.gradle
             ];
           };
         };

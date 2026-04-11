@@ -22,6 +22,9 @@ in
       tool = "ktlint";
       package = pkgs.ktlint;
     };
+    extraConfig = cfg: {
+      languages.gradle.enable = lib.mkDefault true;
+    };
   } {
     inherit pkgs lib config;
   }
