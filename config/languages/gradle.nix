@@ -17,11 +17,17 @@
       runHook preInstall
 
       mkdir -p $out/bin $out/share/gradle-language-server
-      cp "$src/share/vscode/extensions/vscjava.vscode-gradle/lib/ls-fat-jar.jar" \
-        "$out/share/gradle-language-server/ls-fat-jar.jar"
+
+      if [ -f "$src/share/vscode/extensions/vscjava.vscode-gradle/lib/ls-fat-jar.jar" ]; then
+        cp "$src/share/vscode/extensions/vscjava.vscode-gradle/lib/ls-fat-jar.jar" \
+          "$out/share/gradle-language-server/gradle-language-server.jar"
+      else
+        cp "$src/share/vscode/extensions/vscjava.vscode-gradle/lib/gradle-language-server.jar" \
+          "$out/share/gradle-language-server/gradle-language-server.jar"
+      fi
 
       makeWrapper "${pkgs.jdk21}/bin/java" "$out/bin/gradle-language-server" \
-        --add-flags "-cp $out/share/gradle-language-server/ls-fat-jar.jar com.microsoft.gradle.GradleLanguageServer"
+        --add-flags "-cp $out/share/gradle-language-server/gradle-language-server.jar com.microsoft.gradle.GradleLanguageServer"
 
       runHook postInstall
     '';
