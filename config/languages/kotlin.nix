@@ -12,7 +12,7 @@
 
     src = pkgs.fetchzip {
       url = "https://download-cdn.jetbrains.com/kotlin-lsp/${kotlinLspVersion}/kotlin-lsp-${kotlinLspVersion}-linux-x64.zip";
-      hash = "sha256-wAQkIVj0teHZF93YSOb2onlIT6WKPivOiEa4B9GtFrE=";
+      hash = "sha256-Bf2qkFpNhQC/Mz563OapmCXeKN+dTrYyQbOcF6z6b48=";
       stripRoot = false;
     };
 
