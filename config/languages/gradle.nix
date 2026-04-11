@@ -5,6 +5,27 @@
   ...
 }: let
   utils = import ./utils.nix {inherit lib;};
+  gradleLsp = pkgs.stdenvNoCC.mkDerivation {
+    pname = "gradle-language-server";
+    version = pkgs.vscode-extensions.vscjava.vscode-gradle.version;
+    src = pkgs.vscode-extensions.vscjava.vscode-gradle;
+    dontUnpack = true;
+
+    nativeBuildInputs = [pkgs.makeWrapper];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin $out/share/gradle-language-server
+      cp "$src/share/vscode/extensions/vscjava.vscode-gradle/lib/ls-fat-jar.jar" \
+        "$out/share/gradle-language-server/ls-fat-jar.jar"
+
+      makeWrapper "${pkgs.jdk21}/bin/java" "$out/bin/gradle-language-server" \
+        --add-flags "-cp $out/share/gradle-language-server/ls-fat-jar.jar com.microsoft.gradle.GradleLanguageServer"
+
+      runHook postInstall
+    '';
+  };
 in
   utils.mkLang {
     name = "gradle";
@@ -12,7 +33,7 @@ in
     description = "Enable Gradle support";
     lsp = {
       server = "gradle_ls";
-      package = null;
+      package = gradleLsp;
     };
 
     extraLspOptions = {
