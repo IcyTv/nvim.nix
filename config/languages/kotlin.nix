@@ -96,7 +96,10 @@ in
         cmd = cfg.lsp.command;
       };
 
-      plugins.conform-nvim.settings.formatters.ktfmt.args = cfg.format.args;
+      plugins.conform-nvim.settings.formatters.ktfmt = {
+        args = cfg.format.args ++ ["--stdin-name" "$FILENAME"];
+        stdin = true;
+      };
     };
   } {
     inherit pkgs lib config;
