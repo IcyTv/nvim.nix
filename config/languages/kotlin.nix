@@ -57,6 +57,14 @@ in
       package = pkgs.ktlint;
     };
 
+    extraFormatOptions = {
+      args = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = ["--kotlinlang-style"];
+        description = "Additional arguments to pass to ktfmt.";
+      };
+    };
+
     extraOptions = {
       toolchain = lib.mkOption {
         type = with lib.types; nullOr package;
@@ -87,6 +95,8 @@ in
       plugins.lsp.servers.kotlin_lsp = {
         cmd = cfg.lsp.command;
       };
+
+      plugins.conform-nvim.settings.formatters.ktfmt.args = cfg.format.args;
     };
   } {
     inherit pkgs lib config;
