@@ -9,6 +9,7 @@
   kotlinLsp = pkgs.stdenvNoCC.mkDerivation {
     pname = "kotlin-lsp";
     version = kotlinLspVersion;
+    meta.mainProgram = "kotlin-lsp";
 
     src = pkgs.fetchzip {
       url = "https://download-cdn.jetbrains.com/kotlin-lsp/${kotlinLspVersion}/kotlin-lsp-${kotlinLspVersion}-linux-x64.zip";
@@ -33,7 +34,9 @@
       chmod +x $out/share/kotlin-lsp/kotlin-lsp.sh
       substituteInPlace $out/share/kotlin-lsp/kotlin-lsp.sh \
         --replace-fail 'LOCAL_JRE_PATH="$DIR/jre/Contents/Home"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"' \
-        --replace-fail 'LOCAL_JRE_PATH="$DIR/jre"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"'
+        --replace-fail 'LOCAL_JRE_PATH="$DIR/jre"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"' \
+        --replace-fail 'chmod +x "$JAVA_EXEC"' 'chmod +x "$JAVA_EXEC" || true' \
+        --replace-fail 'chmod +x "$LOCAL_JRE_PATH/bin/java"' 'chmod +x "$LOCAL_JRE_PATH/bin/java" || true'
       makeWrapper $out/share/kotlin-lsp/kotlin-lsp.sh $out/bin/kotlin-lsp
 
       runHook postInstall
@@ -93,10 +96,10 @@ in
         lsp.command = lib.mkDefault (
           ["env"]
           ++ lib.optional (cfg.toolchain != null) "KOTLIN_HOME=${cfg.toolchain}"
-          ++ lib.optional (cfg.androidSdk != null) "ANDROID_SDK_ROOT=${cfg.androidSdk}"
-          ++ lib.optional (cfg.androidSdk != null) "ANDROID_HOME=${cfg.androidSdk}"
+          ++ lib.optional (cfg.androidSdk != null) "ANDROID_SDK_ROOT=${cfg.androidSdk}/share/android-sdk"
+          ++ lib.optional (cfg.androidSdk != null) "ANDROID_HOME=${cfg.androidSdk}/share/android-sdk"
           ++ [
-            (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-lsp")
+            (if cfg.lsp.package != null then lib.getExe' cfg.lsp.package "kotlin-lsp" else "kotlin-lsp")
           ]
         );
       };
