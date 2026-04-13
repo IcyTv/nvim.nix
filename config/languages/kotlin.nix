@@ -35,8 +35,8 @@
       substituteInPlace $out/share/kotlin-lsp/kotlin-lsp.sh \
         --replace-fail 'LOCAL_JRE_PATH="$DIR/jre/Contents/Home"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"' \
         --replace-fail 'LOCAL_JRE_PATH="$DIR/jre"' 'LOCAL_JRE_PATH="${pkgs.jdk21}"' \
-        --replace-fail 'chmod +x "$JAVA_EXEC"' 'chmod +x "$JAVA_EXEC" || true' \
-        --replace-fail 'chmod +x "$LOCAL_JRE_PATH/bin/java"' 'chmod +x "$LOCAL_JRE_PATH/bin/java" || true'
+        --replace 'chmod +x "$JAVA_EXEC"' 'chmod +x "$JAVA_EXEC" || true' \
+        --replace 'chmod +x "$LOCAL_JRE_PATH/bin/java"' 'chmod +x "$LOCAL_JRE_PATH/bin/java" || true'
       makeWrapper $out/share/kotlin-lsp/kotlin-lsp.sh $out/bin/kotlin-lsp
 
       runHook postInstall
