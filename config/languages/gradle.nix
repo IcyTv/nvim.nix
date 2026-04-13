@@ -35,7 +35,7 @@
 in
   utils.mkLang {
     name = "gradle";
-    filetypes = ["groovy" "kotlin"];
+    filetypes = ["groovy"];
     description = "Enable Gradle support";
     lsp = {
       server = "gradle_ls";

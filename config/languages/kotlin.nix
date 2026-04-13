@@ -71,6 +71,11 @@ in
         default = null;
         description = "Kotlin toolchain package (for example pkgs.kotlin) to expose as KOTLIN_HOME for the Kotlin language server.";
       };
+      androidSdk = lib.mkOption {
+        type = with lib.types; nullOr package;
+        default = null;
+        description = "Android SDK package to expose as ANDROID_SDK_ROOT and ANDROID_HOME for the Kotlin language server.";
+      };
     };
 
     extraLspOptions = {
@@ -84,12 +89,16 @@ in
     extraConfig = cfg: {
       languages.gradle.enable = lib.mkDefault true;
 
-      languages.kotlin = lib.mkIf (cfg.toolchain != null) {
-        lsp.command = lib.mkDefault [
-          "env"
-          "KOTLIN_HOME=${cfg.toolchain}"
-          (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-lsp")
-        ];
+      languages.kotlin = lib.mkIf (cfg.toolchain != null || cfg.androidSdk != null) {
+        lsp.command = lib.mkDefault (
+          ["env"]
+          ++ lib.optional (cfg.toolchain != null) "KOTLIN_HOME=${cfg.toolchain}"
+          ++ lib.optional (cfg.androidSdk != null) "ANDROID_SDK_ROOT=${cfg.androidSdk}"
+          ++ lib.optional (cfg.androidSdk != null) "ANDROID_HOME=${cfg.androidSdk}"
+          ++ [
+            (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-lsp")
+          ]
+        );
       };
 
       plugins.lsp.servers.kotlin_lsp = {
