@@ -8,11 +8,11 @@
 in
   utils.mkLang {
     name = "qml";
-    filetypes = ["ui"];
+    filetypes = ["qml"];
     description = "Enable QML support";
     lsp = {
       server = "qmlls";
-      package = pkgs.kdePackages.qtdeclarative;
+      package = pkgs.qt6.qtdeclarative;
     };
     format = {
       tool = "qmlformat";
