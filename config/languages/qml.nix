@@ -22,7 +22,7 @@ in
     extraLspOptions = {
       packageName = lib.mkOption {
         type = lib.types.str;
-        default = lsp.packageName or lsp.server;
+        default = "qmlls";
         description = "Executable name inside lsp.package to use.";
       };
       command = lib.mkOption {
