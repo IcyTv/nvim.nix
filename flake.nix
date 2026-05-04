@@ -12,7 +12,6 @@
   };
 
   outputs = {
-    self,
     nixpkgs,
     nixvim,
     flake-parts,
@@ -24,17 +23,14 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = supportedSystems;
 
-      perSystem = {
-        pkgs,
-        system,
-        ...
-      }: let
+      perSystem = {system, ...}: let
         unfreePkgs = import inputs.nixpkgs {
           inherit system;
           config.allowUnfree = true;
         };
         # Call the library function from the final flake outputs
-        nvim = inputs.self.lib.${system}.makeNeovimWithLanguages {
+        nvim = inputs.self.lib.makeNeovimWithLanguages {
+          inherit system;
           pkgs = unfreePkgs;
           languages = {
             nix.enable = true;
@@ -62,68 +58,42 @@
       };
 
       # Top-level, non-system-specific outputs
-      flake = rec {
+      flake = let
+        nixpkgsLib = nixpkgs.lib;
+        languages = builtins.readDir ./config/languages;
+        nixFiles = nixpkgsLib.filterAttrs (name: type: type == "regular" && nixpkgsLib.hasSuffix ".nix" name && name != "utils.nix") languages;
+      in rec {
         # Nixvim modules used by the library function
-        nixvimModules = {
-          default = import ./config;
-          prettier = import ./config/languages/prettier.nix;
-          css = import ./config/languages/css.nix;
-          rust = import ./config/languages/rust.nix;
-          nix = import ./config/languages/nix.nix;
-          shell = import ./config/languages/shell.nix;
-          typescript = import ./config/languages/typescript.nix;
-          tailwind = import ./config/languages/tailwind.nix;
-          svelte = import ./config/languages/svelte.nix;
-          toml = import ./config/languages/toml.nix;
-          json = import ./config/languages/json.nix;
-          yaml = import ./config/languages/yaml.nix;
-          html = import ./config/languages/html.nix;
-          c = import ./config/languages/c.nix;
-          zig = import ./config/languages/zig.nix;
-          python = import ./config/languages/python.nix;
-          lua = import ./config/languages/lua.nix;
-          kotlin = import ./config/languages/kotlin.nix;
-          java = import ./config/languages/java.nix;
-          gradle = import ./config/languages/gradle.nix;
-        };
+        nixvimModules =
+          {
+            default = import ./config;
+          }
+          // nixpkgsLib.mapAttrs' (
+            name: _:
+              nixpkgsLib.nameValuePair
+              (nixpkgsLib.removeSuffix ".nix" name)
+              (import (./config/languages + "/${name}"))
+          )
+          nixFiles;
 
         # System-dependent library, created for each system
-        lib = nixpkgs.lib.genAttrs supportedSystems (system: {
-          makeNeovimWithLanguages = {
-            pkgs,
-            languages ? {},
-            extraConfig ? {},
-          }:
-            nixvim.legacyPackages.${system}.makeNixvimWithModule {
-              inherit pkgs;
-              module = [
-                nixvimModules.default
-                nixvimModules.prettier
-                nixvimModules.css
-                nixvimModules.rust
-                nixvimModules.nix
-                nixvimModules.shell
-                nixvimModules.typescript
-                nixvimModules.tailwind
-                nixvimModules.svelte
-                nixvimModules.toml
-                nixvimModules.json
-                nixvimModules.yaml
-                nixvimModules.html
-                nixvimModules.c
-                nixvimModules.zig
-                nixvimModules.python
-                nixvimModules.lua
-                nixvimModules.kotlin
-                nixvimModules.java
-                nixvimModules.gradle
+        lib.makeNeovimWithLanguages = {
+          system,
+          pkgs,
+          languages ? {},
+          extraConfig ? {},
+        }:
+          nixvim.legacyPackages.${system}.makeNixvimWithModule {
+            inherit pkgs;
+            module =
+              (builtins.attrValues nixvimModules)
+              ++ [
                 # This module sets the configuration based on the function's input.
                 {config.languages = languages;}
                 {config.languages.nix.enable = pkgs.lib.mkDefault true;}
                 extraConfig
               ];
-            };
-        });
+          };
 
         # NixOS module to activate the nixvim configuration
         nixosModules.default = {
@@ -133,28 +103,7 @@
         }: {
           imports = [nixvim.nixosModules.default];
           config = lib.mkIf config.programs.nixvim.enable {
-            programs.nixvim.imports = [
-              nixvimModules.default
-              nixvimModules.prettier
-              nixvimModules.css
-              nixvimModules.rust
-              nixvimModules.nix
-              nixvimModules.shell
-              nixvimModules.typescript
-              nixvimModules.tailwind
-              nixvimModules.svelte
-              nixvimModules.toml
-              nixvimModules.json
-              nixvimModules.yaml
-              nixvimModules.html
-              nixvimModules.c
-              nixvimModules.zig
-              nixvimModules.python
-              nixvimModules.lua
-              nixvimModules.kotlin
-              nixvimModules.java
-              nixvimModules.gradle
-            ];
+            programs.nixvim.imports = builtins.attrValues nixvimModules;
           };
         };
       };
