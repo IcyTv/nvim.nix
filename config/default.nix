@@ -4,7 +4,6 @@
   ...
 }: {
   imports = [
-    ./ai.nix
     ./treesitter.nix
     ./telescope.nix
     ./completion.nix
@@ -47,12 +46,6 @@
       undotree.enable = true;
       fugitive.enable = true;
       nvim-tree.enable = true;
-    };
-    plugins.image = {
-      enable = true;
-      settings = {
-        backend = "kitty";
-      };
     };
 
     extraPackages = [
