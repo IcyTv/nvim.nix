@@ -3,10 +3,30 @@
     enable = true;
     keymaps = {
       diagnostic = {
-        "<leader>j" = "goto_next";
-        "<leader>k" = "goto_prev";
         "<leader>cd" = "open_float";
       };
+
+      extra = [
+        {
+          key = "<leader>j";
+          action.__raw = ''
+            function()
+              vim.diagnostic.jump({ count = 1, float = true })
+            end
+          '';
+          options.desc = "Jump to next diagnostic";
+        }
+
+        {
+          key = "<leader>k";
+          action.__raw = ''
+            function()
+              vim.diagnostic.jump({ count = -1, float = true })
+            end
+          '';
+          options.desc = "Jump to previous diagnostic";
+        }
+      ];
 
       lspBuf = {
         "K" = "hover";
