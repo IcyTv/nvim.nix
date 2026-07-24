@@ -42,6 +42,16 @@ in
         default = null;
         description = "Android SDK package to expose as ANDROID_SDK_ROOT and ANDROID_HOME for the Kotlin language server.";
       };
+      javaPackage = lib.mkOption {
+        type = with lib.types; nullOr package;
+        default = pkgs.jdk21;
+        description = "Java/JDK package to make available on PATH for the Kotlin language server and Gradle.";
+      };
+      gradlePackage = lib.mkOption {
+        type = with lib.types; nullOr package;
+        default = pkgs.gradle;
+        description = "Gradle package to make available on PATH for dependency resolution in Gradle projects.";
+      };
     };
 
     extraLspOptions = {
@@ -55,6 +65,23 @@ in
     extraConfig = cfg: {
       languages.gradle.enable = lib.mkDefault true;
 
+      extraPackages = lib.optional (cfg.javaPackage != null) cfg.javaPackage
+        ++ lib.optional (cfg.gradlePackage != null) cfg.gradlePackage;
+
+      plugins.lsp.servers.kotlin_language_server = {
+        cmd = lib.mkIf (cfg.lsp.command != null) cfg.lsp.command;
+        rootMarkers = [
+          "settings.gradle.kts"
+          "settings.gradle"
+          "build.gradle.kts"
+          "build.gradle"
+          "pom.xml"
+          "build.xml"
+        ];
+        extraOptions.init_options.storagePath =
+          lib.nixvim.mkRaw "vim.fn.stdpath('data') .. '/kotlin-language-server'";
+      };
+
       languages.kotlin = lib.mkIf (cfg.toolchain != null || cfg.androidSdk != null) {
         lsp.command = lib.mkDefault (
           ["env"]
@@ -65,10 +92,6 @@ in
             (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-language-server")
           ]
         );
-      };
-
-      plugins.lsp.servers.kotlin_language_server = {
-        cmd = cfg.lsp.command;
       };
 
       plugins.conform-nvim.settings.formatters.ktfmt = {
