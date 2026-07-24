@@ -78,12 +78,16 @@
 
     config = lib.mkIf cfg.enable (lib.mkMerge [
       # LSP Configuration
-      (lib.mkIf (lsp != null && cfg.lsp.enable) {
-        plugins.lsp.servers.${lsp.server} = {
-          enable = true;
-          package = cfg.lsp.package;
-        };
-      })
+      (lib.mkIf (lsp != null && cfg.lsp.enable) (
+        if lsp != null
+        then {
+          plugins.lsp.servers.${lsp.server} = {
+            enable = true;
+            package = cfg.lsp.package;
+          };
+        }
+        else {}
+      ))
 
       # Format Configuration
       (lib.mkIf (format != null && cfg.format.enable) {
