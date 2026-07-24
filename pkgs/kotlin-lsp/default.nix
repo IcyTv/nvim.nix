@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     chmod +x $out/share/bin/intellij-server $out/share/kotlin-lsp.sh
     makeWrapper $out/share/bin/intellij-server $out/bin/kotlin-language-server \
+      --add-flags "--stdio" \
       --set-default JAVA_HOME "$out/share/jbr" \
       --set-default JDK_HOME "$out/share/jbr"
 
