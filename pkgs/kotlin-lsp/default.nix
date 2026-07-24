@@ -9,7 +9,7 @@
   gzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "kotlin-lsp";
+  pname = "kotlin-language-server";
   version = "262.8190.0";
 
   src = fetchurl {
