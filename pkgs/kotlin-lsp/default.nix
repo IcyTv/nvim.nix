@@ -3,10 +3,19 @@
   fetchurl,
   makeWrapper,
   autoPatchelfHook,
-  jdk,
   stdenv,
   gnutar,
   gzip,
+  libX11,
+  libXext,
+  libXi,
+  libXrender,
+  libXtst,
+  libxkbcommon,
+  wayland,
+  freetype,
+  alsa-lib,
+  zlib,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kotlin-language-server";
@@ -25,8 +34,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    jdk
     stdenv.cc.cc.lib
+    libX11
+    libXext
+    libXi
+    libXrender
+    libXtst
+    libxkbcommon
+    wayland
+    freetype
+    alsa-lib
+    zlib
   ];
 
   dontUnpack = true;
@@ -35,12 +53,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,share}
-    tar xzf "$src" -C "$out/share" --strip-components=1 --exclude='jbr'
+    tar xzf "$src" -C "$out/share" --strip-components=1
 
     chmod +x $out/share/bin/intellij-server $out/share/kotlin-lsp.sh
     makeWrapper $out/share/bin/intellij-server $out/bin/kotlin-language-server \
-      --set-default JAVA_HOME "${jdk}/lib/openjdk" \
-      --set-default JDK_HOME "${jdk}/lib/openjdk"
+      --set-default JAVA_HOME "$out/share/jbr" \
+      --set-default JDK_HOME "$out/share/jbr"
 
     runHook postInstall
   '';
