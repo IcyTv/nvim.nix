@@ -73,8 +73,8 @@ in
         lsp.command = lib.mkDefault (
           ["env"]
           ++ lib.optional (cfg.toolchain != null) "KOTLIN_HOME=${cfg.toolchain}"
-          ++ lib.optional (cfg.androidSdk != null) "ANDROID_SDK_ROOT=${cfg.androidSdk}/share/android-sdk"
-          ++ lib.optional (cfg.androidSdk != null) "ANDROID_HOME=${cfg.androidSdk}/share/android-sdk"
+          ++ lib.optional (cfg.androidSdk != null) "ANDROID_SDK_ROOT=${cfg.androidSdk}/libexec/android-sdk"
+          ++ lib.optional (cfg.androidSdk != null) "ANDROID_HOME=${cfg.androidSdk}/libexec/android-sdk"
           ++ [
             (if cfg.lsp.package != null then lib.getExe cfg.lsp.package else "kotlin-language-server")
           ]
