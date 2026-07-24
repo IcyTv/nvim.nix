@@ -40,8 +40,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     chmod +x $out/share/bin/intellij-server $out/share/kotlin-lsp.sh
     makeWrapper $out/share/bin/intellij-server $out/bin/kotlin-language-server \
       --set-default JAVA_HOME "${jdk}" \
-      --set-default JDK_HOME "${jdk}"
+      --set-default JDK_HOME "${jdk}" \
+      --prefix LD_LIBRARY_PATH : "${jdk}/lib/server"
 
     runHook postInstall
   '';
+
+  meta.mainProgram = "kotlin-language-server";
 })
