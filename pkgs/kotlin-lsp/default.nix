@@ -19,11 +19,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kotlin-language-server";
-  version = "262.8190.0";
+  version = "262.9593.0";
 
   src = fetchurl {
     url = "https://download-cdn.jetbrains.com/language-server/kotlin-server/${finalAttrs.version}/kotlin-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-i0xw6VBlQg54Z8mar58Y4LTnYxHsRT5MGjnj9q53TL8=";
+    hash = "sha256-LZnY4Zj75KqPRIHjd5lyTOlIA7TqEqYLQWBA4/zXzF4=";
   };
 
   nativeBuildInputs = [
