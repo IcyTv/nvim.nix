@@ -2,7 +2,7 @@
   plugins.treesitter = {
     enable = true;
     settings = {
-      indent.enable = true;
+      indent.enable = false;
       highlight.enable = true;
       incremental_selection.enable = true;
     };
