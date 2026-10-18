@@ -169,6 +169,7 @@ makeNeovimWithLanguages {
 | **Nix** | `nixd` | `alejandra` | `statix`, `deadnix` | - | |
 | **Shell** | `bashls` | `shfmt` | `shellcheck` | - | |
 | **Lua** | `lua_ls` | `stylua` | `luacheck` | - | |
+| **Haskell** | `hls` | `fourmolu`, `cabal-fmt` | `hlint` | YAML | Supports Cabal formatting and optional GHC installation via Nixvim. |
 
 ## License
 MIT
