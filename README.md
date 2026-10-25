@@ -133,6 +133,26 @@ languages.zig = {
 ```
 *Note: The flake will print a warning during evaluation if it detects a version mismatch between `zls` and `zig`.*
 
+#### Tailwind CSS in Any Filetype
+
+Tailwind attaches to all filetypes by default, including Rust. Unknown filetypes
+are treated as HTML for class completion; formatting is unchanged.
+
+```nix
+makeNeovimWithLanguages {
+  inherit system pkgs;
+  languages.tailwind = {
+    enable = true;
+    lsp.filetypes = null; # Default: all filetypes.
+    # lsp.filetypes = ["html" "rust"]; # Alternatively, restrict attachment.
+  };
+}
+```
+
+Tailwind still requires a detectable project root and a Tailwind configuration
+or CSS entry point. Set `lsp.filetypes = []` to prevent automatic attachment,
+or `lsp.enable = false` to disable the Tailwind LSP entirely.
+
 #### Adding Custom Config
 
 You can inject arbitrary NixVim configuration using `extraConfig` in the library function.
