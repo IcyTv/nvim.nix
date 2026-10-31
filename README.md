@@ -133,6 +133,27 @@ languages.zig = {
 ```
 *Note: The flake will print a warning during evaluation if it detects a version mismatch between `zls` and `zig`.*
 
+#### Go
+
+```nix
+languages.go.enable = true;
+```
+
+Enables `gopls` for completion, navigation, and diagnostics, `gofmt` for
+formatting, and `golangci-lint` for linting via `nvim-lint`. Keep your project's Go
+toolchain available on `PATH` (for example, via a devshell) so these tools can
+load and analyze it.
+
+Use `languages.go.lsp.settings` to configure gopls, or the standard package and
+command overrides to use project-specific tools. Set `languages.go.format.package = null`
+to use `gofmt` from `PATH`.
+
+Linting respects your project's `.golangci.yml` or `.golangci.yaml` configuration
+and runs on the existing lint events (buffer entry, save, and leaving insert mode)
+or manually with `<leader>cl`. Set `languages.go.lint.enable = false` to disable it.
+Use `languages.go.lint.package` and `languages.go.lint.command` to override the
+linter; setting `lint.package = null` uses `golangci-lint` from `PATH`.
+
 #### Tailwind CSS in Any Filetype
 
 Tailwind attaches to all filetypes by default, including Rust. Unknown filetypes
@@ -175,6 +196,7 @@ makeNeovimWithLanguages {
 | Language | LSP | Formatter | Linter | Enabled Dependencies | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Rust** | `rust-analyzer` | `rustfmt` | `cargo check` | TOML | Supports `toolchain` override. |
+| **Go** | `gopls` | `gofmt` | `golangci-lint` | - | Uses the project's Go toolchain from `PATH`. |
 | **C/C++** | `clangd` | `clang-format` | `clang-tidy` | - | Clangd configured with modern defaults. |
 | **Zig** | `zls` | `zig fmt` | - | - | Supports `package` override. |
 | **Python** | `basedpyright` | `ruff` | `ruff` | TOML | Uses `basedpyright` for strict types. |
