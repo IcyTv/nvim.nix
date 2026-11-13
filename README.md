@@ -154,6 +154,35 @@ or manually with `<leader>cl`. Set `languages.go.lint.enable = false` to disable
 Use `languages.go.lint.package` and `languages.go.lint.command` to override the
 linter; setting `lint.package = null` uses `golangci-lint` from `PATH`.
 
+#### Astro
+
+```nix
+languages.astro.enable = true;
+```
+
+Enables the Astro language server and `prettierd` formatting for `.astro` files,
+plus HTML, CSS, JavaScript/TypeScript, and JSON support. Treesitter highlighting
+is already included. Use `languages.astro.lsp.settings` and
+`languages.astro.lsp.command` to customize the language server, or the standard
+LSP and formatter package overrides to use project-specific tools.
+
+Install Prettier and its Astro plugin in your project:
+
+```sh
+npm install --save-dev prettier prettier-plugin-astro
+```
+
+Add the plugin to your Prettier configuration (merge with any existing settings):
+
+```json
+{
+  "plugins": ["prettier-plugin-astro"]
+}
+```
+
+`prettierd` uses the project's Prettier installation and plugin. Set
+`languages.astro.format.enable = false` to disable Astro formatting.
+
 #### Tailwind CSS in Any Filetype
 
 Tailwind attaches to all filetypes by default, including Rust. Unknown filetypes
@@ -202,6 +231,7 @@ makeNeovimWithLanguages {
 | **Python** | `basedpyright` | `ruff` | `ruff` | TOML | Uses `basedpyright` for strict types. |
 | **JS/TS** | `ts_ls` | `prettierd` | `eslint_d` | JSON | |
 | **Svelte** | `svelte` | `prettierd` | - | HTML, CSS, JS/TS, JSON | |
+| **Astro** | `astro` | `prettierd` | - | HTML, CSS, JS/TS, JSON | Requires project-local `prettier` and `prettier-plugin-astro`. |
 | **Tailwind** | `tailwindcss` | `prettierd` | - | HTML, CSS | |
 | **HTML** | `html` | `prettierd` | - | - | |
 | **CSS** | `cssls` | `prettierd` | `eslint_d` | - | |

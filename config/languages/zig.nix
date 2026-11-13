@@ -43,8 +43,8 @@ in
       # Best-effort version check (only works if 'version' attribute is present on the derivation)
       zigVersion = cfg.format.package.version or "unknown";
       zlsVersion = cfg.lsp.package.version or "unknown";
-      # We compare only if both are known and differ. 
-      # Note: This runs at eval time, so it checks the Nix derivation versions, 
+      # We compare only if both are known and differ.
+      # Note: This runs at eval time, so it checks the Nix derivation versions,
       # which is exactly what we want to ensure the inputs match.
       versionMismatch = (zigVersion != "unknown") && (zlsVersion != "unknown") && (zigVersion != zlsVersion);
     in {
@@ -56,7 +56,7 @@ in
       languages.zig = lib.mkIf (cfg.package != null) {
         format.package = lib.mkDefault cfg.package;
         # mkLang will automatically update format.command to match the new package
-        
+
         # We can't strictly force LSP package because `zig` usually doesn't include `zls`.
       };
 
