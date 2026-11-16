@@ -12,7 +12,7 @@ in
     filetypes = ["svelte"];
     lsp = {
       server = "svelte";
-      package = pkgs.nodePackages.svelte-language-server;
+      package = pkgs.svelte-language-server or pkgs.nodePackages.svelte-language-server;
     };
     format = {
       tool = "prettierd";
