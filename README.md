@@ -183,6 +183,66 @@ Add the plugin to your Prettier configuration (merge with any existing settings)
 `prettierd` uses the project's Prettier installation and plugin. Set
 `languages.astro.format.enable = false` to disable Astro formatting.
 
+#### Markdown and MDX
+
+Enable either stack independently, or both:
+
+```nix
+languages.markdown.enable = true;
+languages.mdx.enable = true;
+```
+
+Markdown enables `marksman`, `prettierd`, and `markdownlint-cli2` via `nvim-lint`
+for the `markdown` and legacy `markdown.mdx` filetypes. MDX detects `.mdx` files
+as the separate `mdx` filetype and enables `mdx_analyzer` (from
+`pkgs.mdx-language-server`) plus `prettierd`, with no default linter. Marksman
+does not attach to this `mdx` filetype, so enabling both avoids duplicate routing.
+Neither stack enables the other; MDX does not automatically enable TypeScript,
+ESLint, or the Astro language server, even in an Astro project.
+
+Both stacks support `lsp.command` and `lsp.settings`, plus the standard LSP and
+formatter package/command overrides. For example:
+
+```nix
+languages.mdx = {
+  enable = true;
+  lsp.package = null; # Use mdx-language-server from PATH.
+  format.package = null; # Use prettierd from PATH.
+};
+languages.markdown.lint.enable = false;
+```
+
+Use `languages.markdown.lint.package` and `languages.markdown.lint.command` to
+override `markdownlint-cli2`; its project configuration controls Markdown rules.
+Set either stack's `lsp.enable` or `format.enable` to `false` to disable that tool.
+MDX reuses the included Markdown Treesitter parser for baseline highlighting;
+this does not provide full JSX highlighting.
+
+For MDX type checking, add `mdx.checkMdx` to your project's `tsconfig.json`.
+For Astro MDX content, configure the analyzer's parser plugins for frontmatter
+and GFM when your content uses them (merge with existing configuration):
+
+```json
+{
+  "include": ["src/**/*.mdx"],
+  "mdx": {
+    "checkMdx": true,
+    "plugins": ["remark-frontmatter", "remark-gfm"]
+  }
+}
+```
+
+Install these parser plugins in the project, not in the editor configuration:
+
+```sh
+npm install --save-dev remark-frontmatter remark-gfm
+```
+
+Keep the project's TypeScript/MDX dependencies available to the language server.
+These analyzer settings do not configure Astro's rendering pipeline. Imported
+`.astro` components do not receive full Astro prop checking inside MDX;
+`mdx_analyzer` does not replace Astro's tooling for `.astro` files.
+
 #### Tailwind CSS in Any Filetype
 
 Tailwind attaches to all filetypes by default, including Rust. Unknown filetypes
@@ -232,6 +292,8 @@ makeNeovimWithLanguages {
 | **JS/TS** | `ts_ls` | `prettierd` | `eslint_d` | JSON | |
 | **Svelte** | `svelte` | `prettierd` | - | HTML, CSS, JS/TS, JSON | |
 | **Astro** | `astro` | `prettierd` | - | HTML, CSS, JS/TS, JSON | Requires project-local `prettier` and `prettier-plugin-astro`. |
+| **Markdown** | `marksman` | `prettierd` | `markdownlint-cli2` | - | Independent opt-in with `languages.markdown.enable`. |
+| **MDX** | `mdx_analyzer` | `prettierd` | - | - | Independent opt-in with `languages.mdx.enable`; no automatic Astro LSP or TypeScript/ESLint stack. |
 | **Tailwind** | `tailwindcss` | `prettierd` | - | HTML, CSS | |
 | **HTML** | `html` | `prettierd` | - | - | |
 | **CSS** | `cssls` | `prettierd` | `eslint_d` | - | |
