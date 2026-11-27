@@ -7,18 +7,12 @@
       incremental_selection.enable = true;
     };
     # allGrammars pulls in every parser (keeps highlighting working even for
-    # filetypes we don't otherwise configure). nvim-treesitter's withPlugins
-    # (used internally to assemble grammarPackages) also tacks on a tiny
-    # "associatedQuery" derivation per grammar — a plain symlink into
-    # queries/<lang> that nixpkgs deliberately always builds locally rather
-    # than substitute, since it's cheaper than round-tripping to a binary
-    # cache (see nixpkgs' nvim-treesitter overrides.nix). With ~300 grammars
-    # that's ~300 extra local derivations for no benefit: the base
-    # nvim-treesitter plugin already ships runtime/queries/<lang> for every
-    # language, so those symlink-only duplicates are redundant. Stripping
-    # associatedQuery halves the derivation count without dropping any
-    # grammar or any highlighting.
-    grammarPackages = map (g: g // {associatedQuery = null;}) pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars;
+    # filetypes we don't otherwise configure). Each grammar's "associatedQuery"
+    # derivation is what actually exposes nvim-treesitter's bundled queries
+    # (which live under runtime/queries/<lang>, not the top-level queries/<lang>
+    # nvim's runtimepath scanning needs) — it's not a redundant duplicate, so it
+    # must stay or highlighting/textobjects silently stop working everywhere.
+    grammarPackages = pkgs.vimPlugins.nvim-treesitter.passthru.allGrammars;
   };
   plugins.treesitter-textobjects = {
     enable = true;
